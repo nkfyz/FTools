@@ -7,11 +7,25 @@ class Ftimer(object):
         - name: str: Name of the timer.
         - logging: bool: Whether using the logging format to print elapsed time.
     """
-    def __init__(self, name: str, logging=False):
+    def __init__(self,
+                 name="Code",
+                 type="INFO",
+                 logging=False):
         self.name = name
         self.start_time = 0
         self.end_time = 0
+        
+        self.logger = None
+        self.logger_format = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>"+ type + "</level> | <cyan>{file}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
         self.logging = logging
+        
+        if self.logging:
+            from loguru import logger
+            import sys
+            self.logger = logger
+            self.logger.remove()
+            self.logger.add(sys.stderr, format=self.logger_format)
+            
         
     def __enter__(self):
         self.start_time = time.time()
@@ -20,8 +34,7 @@ class Ftimer(object):
         self.end_time = time.time()
         elapsed_time = (self.end_time - self.start_time) * 1000
         if self.logging:
-            from loguru import logger
-            logger.opt(depth=1).info(f"{self.name} time: {elapsed_time:.2f} ms.")
+            self.logger.opt(depth=1).info(f"{self.name} time: {elapsed_time:.2f} ms.")
         else:
             print(f"{self.name} time: {elapsed_time:.2f} ms.")
     
