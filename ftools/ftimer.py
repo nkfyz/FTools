@@ -10,13 +10,15 @@ class Ftimer(object):
     def __init__(self,
                  name="Code",
                  type="INFO",
-                 logging=False):
+                 logging=False,
+    ):
         self.name = name
+        self.type = type
         self.start_time = 0
         self.end_time = 0
         
         self.logger = None
-        self.logger_format = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>"+ type + "</level> | <cyan>{file}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+        self.logger_format = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>"+ self.type + "</level> | <cyan>{file}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
         self.logging = logging
         
         if self.logging:
@@ -26,7 +28,6 @@ class Ftimer(object):
             self.logger.remove()
             self.logger.add(sys.stderr, format=self.logger_format)
             
-        
     def __enter__(self):
         self.start_time = time.time()
     
