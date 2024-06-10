@@ -1,6 +1,6 @@
 import argparse
 
-# parser = argparse.ArgumentParser(description="This is a program that does something")
+parser = argparse.ArgumentParser(description="This is a program that does something")
 # options = ["input_len"]
 
 def generateArgparser(parser, options):
